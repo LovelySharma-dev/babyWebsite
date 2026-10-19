@@ -9,6 +9,11 @@ app.innerHTML = `
         <span class="brand-mark" aria-hidden="true">P</span>
         <span><strong>pip.exe</strong><small>midnight nursery / online</small></span>
       </a>
+      <nav class="quick-nav" aria-label="Primary navigation">
+        <a href="#story">story</a>
+        <a href="#work">drawer</a>
+        <a href="#guestbook">wish</a>
+      </nav>
       <div class="browser-actions">
         <span class="status-dot" aria-hidden="true"></span><span class="tiny-label">dreams: open</span>
         <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false"><span aria-hidden="true">☼</span> day mode</button>
@@ -20,9 +25,9 @@ app.innerHTML = `
     <main>
       <section class="hero wrap" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="eyebrow"><span>✦</span> junior dream engineer · midnight nursery <span>✦</span></p>
-          <h1 id="hero-title">Pip builds the<br /><em>dreams</em> you fall<br />asleep inside.</h1>
-          <p class="hero-intro">Tonight, one tiny creature has lost its favorite dream. Follow Pip's trail before sunrise.</p>
+          <p class="eyebrow"><span>✦</span> tonight's assignment / 00:00—06:00 <span>✦</span></p>
+          <h1 id="hero-title">A dream is<br /><em>missing.</em></h1>
+          <p class="hero-intro">Four quiet moments from Pip's night shift. Follow the clues, move at your own pace, and help one small dream find its way home.</p>
           <div class="hero-actions">
             <button class="primary-button" id="enter-button" type="button">Begin the night shift <span aria-hidden="true">↘</span></button>
             <a class="text-link" href="#story">follow the stars <span aria-hidden="true">↓</span></a>
@@ -88,7 +93,7 @@ app.innerHTML = `
         <div class="project-grid">
           <article class="project project-lullaby">
             <div class="project-visual asset-visual"><span class="project-number">01 / 03</span><img src="/assets/pip_lullaby_box.jpg" alt="The Lullaby Lab music box" width="1024" height="924" loading="lazy" /><span class="visual-note">choose the repair note</span></div>
-            <div class="project-info"><p class="project-type">repair log / 00:47</p><h3>The Lullaby Lab</h3><p>The missing dream has a cracked melody. Pick a mood to tune the final note.</p><div class="mood-controls" role="group" aria-label="Choose a lullaby mood"><button class="mood active" data-mood="hush" type="button">hush</button><button class="mood" data-mood="glow" type="button">glow</button><button class="mood" data-mood="bounce" type="button">bounce</button></div><p class="project-response" id="music-response">the room is listening.</p></div>
+            <div class="project-info"><p class="project-type">repair log / 00:47</p><h3>The Lullaby Lab</h3><p>The missing dream has a cracked melody. Pick a mood to tune the final note.</p><div class="mood-controls" role="group" aria-label="Choose a lullaby mood"><button class="mood active" data-mood="hush" type="button">hush</button><button class="mood" data-mood="glow" type="button">glow</button><button class="mood" data-mood="bounce" type="button">bounce</button></div><button class="inline-button lullaby-button" id="lullaby-toggle" type="button" aria-pressed="false">play sweet lullaby <span aria-hidden="true">♫</span></button><p class="project-response" id="music-response" aria-live="polite">the room is listening.</p></div>
           </article>
           <article class="project project-lantern">
             <div class="project-visual asset-visual"><span class="project-number">02 / 03</span><img src="/assets/pip_dream_lantern.png" alt="Pip's glowing crescent moon dream lantern" width="1024" height="914" loading="lazy" /><span class="visual-note">choose a warm escort</span></div>
@@ -200,6 +205,8 @@ document.querySelector('#wish-form').addEventListener('submit', (event) => { eve
 
 let soundEnabled = false
 let audioContext
+let lullabyTimers = []
+let lullabyPlaying = false
 const playClick = (pitch = 520) => {
   if (!soundEnabled) return
   const AudioContextClass = window.AudioContext || window.webkitAudioContext
@@ -216,6 +223,63 @@ const playClick = (pitch = 520) => {
   oscillator.start()
   oscillator.stop(audioContext.currentTime + 0.09)
 }
+const stopLullaby = () => {
+  lullabyTimers.forEach((timer) => window.clearTimeout(timer))
+  lullabyTimers = []
+  lullabyPlaying = false
+  const button = document.querySelector('#lullaby-toggle')
+  button.setAttribute('aria-pressed', 'false')
+  button.innerHTML = 'play sweet lullaby <span aria-hidden="true">♫</span>'
+}
+const playLullaby = () => {
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext
+  if (!AudioContextClass) {
+    document.querySelector('#music-response').textContent = 'this browser cannot play the lullaby.'
+    return
+  }
+  audioContext ||= new AudioContextClass()
+  audioContext.resume()
+  stopLullaby()
+  lullabyPlaying = true
+  const button = document.querySelector('#lullaby-toggle')
+  const response = document.querySelector('#music-response')
+  button.setAttribute('aria-pressed', 'true')
+  button.innerHTML = 'stop lullaby <span aria-hidden="true">■</span>'
+  response.textContent = 'a little song is settling in.'
+  const notes = [261.63, 329.63, 392, 329.63, 293.66, 349.23, 440, 349.23, 261.63, 329.63, 392, 523.25]
+  const noteLength = 0.48
+  notes.forEach((frequency, index) => {
+    const timer = window.setTimeout(() => {
+      if (!lullabyPlaying) return
+      const start = audioContext.currentTime
+      const oscillator = audioContext.createOscillator()
+      const gain = audioContext.createGain()
+      oscillator.type = 'sine'
+      oscillator.frequency.value = frequency
+      gain.gain.setValueAtTime(0.0001, start)
+      gain.gain.exponentialRampToValueAtTime(0.045, start + 0.04)
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + noteLength - 0.05)
+      oscillator.connect(gain).connect(audioContext.destination)
+      oscillator.start(start)
+      oscillator.stop(start + noteLength)
+      if (index === notes.length - 1) {
+        lullabyTimers.push(window.setTimeout(() => {
+          stopLullaby()
+          response.textContent = 'the room is listening.'
+        }, noteLength * 1000))
+      }
+    }, index * noteLength * 1000)
+    lullabyTimers.push(timer)
+  })
+}
+document.querySelector('#lullaby-toggle').addEventListener('click', () => {
+  if (lullabyPlaying) {
+    stopLullaby()
+    document.querySelector('#music-response').textContent = 'the lullaby is tucked away.'
+    return
+  }
+  playLullaby()
+})
 document.querySelector('#sound-toggle').addEventListener('click', (event) => {
   soundEnabled = !soundEnabled
   event.currentTarget.setAttribute('aria-pressed', String(soundEnabled))

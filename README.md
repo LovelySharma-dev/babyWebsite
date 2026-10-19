@@ -15,7 +15,7 @@ One night, a tiny neighborhood creature loses its favorite dream. Visitors follo
 - Four-step keyboard-accessible story player with progress and scene transitions.
 - Extended bedtime routine section with a handwritten nursery card and Pip's three care steps.
 - Lullaby mood selector, lantern lighting study, and hand-drawn delivery route.
-- Opt-in synthesized click sounds with a visible sound toggle. Audio never starts automatically.
+- Opt-in synthesized click sounds with a visible sound toggle and a manually-started sweet lullaby in The Lullaby Lab. Audio never starts automatically.
 - Desktop-only sparkle cursor trail with reduced-motion and mobile fallbacks.
 - Reversible Responsive Chaos Mode that rearranges the visual composition without changing reading order.
 - Retro visitor counter and local-only guestbook wish response.
@@ -40,7 +40,7 @@ npm run build
 - Character and scene imagery: official haX.baby Pip Creator Asset Pack in [`public/assets/`](./public/assets/).
 - Typography: Fraunces and DM Mono, loaded from Google Fonts.
 - Illustration, layout, interactions, and animation: original project code in `src/`.
-- No third-party audio files or persistence backend are used. Click sounds are generated locally with the Web Audio API after opt-in.
+- No third-party audio files or persistence backend are used. Click sounds and the sweet lullaby are generated locally with the Web Audio API after an explicit interaction.
 
 ## Submission audit
 

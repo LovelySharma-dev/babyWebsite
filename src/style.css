@@ -63,6 +63,8 @@
 
 .utility-toggle { cursor:pointer; border:1px solid var(--line); background:transparent; color:var(--ink); padding:6px 8px; font-size:9px; letter-spacing:.06em; text-transform:uppercase; }
 .utility-toggle:hover, .utility-toggle[aria-pressed='true'] { background:var(--violet); color:var(--paper); border-color:var(--violet); }
+.lullaby-button { margin-top:18px; }
+.lullaby-button[aria-pressed='true'] { color:var(--rose); }
 .counter strong.counter-tick { animation:counter-tick .35s ease-out; }
 .hero-asset-art #pip-portrait { cursor:pointer; outline:none; border-radius:50%; transition:transform .3s ease, filter .3s ease; }
 .hero-asset-art #pip-portrait:hover, .hero-asset-art #pip-portrait:focus-visible { transform:translateY(-7px) rotate(-1deg); filter:drop-shadow(0 24px 24px rgba(31,20,55,.25)); }
@@ -216,3 +218,37 @@ button, a { min-height:44px; }
 @media (max-width: 850px) { .bedtime-grid { grid-template-columns:1fr; gap:44px; } .crib-card { max-width:620px; width:100%; margin:auto; } }
 @media (max-width: 600px) { .bedtime { padding-bottom:82px; } .routine-list { margin-top:24px; } .crib-card { min-height:330px; padding:25px 22px; } .crib-card:before { width:220px; height:220px; } .crib-card strong { font-size:34px; } .crib-bunny { bottom:105px; right:24px; } }
 @media (max-width: 360px) { .crib-card { min-height:300px; } .crib-card strong { font-size:29px; } }
+
+/* Opening frame: treat the assignment like a page from Pip's night log. */
+.quick-nav { display:flex; align-items:center; gap:20px; margin-left:auto; }
+.quick-nav a { color:var(--muted-ink); font-size:10px; letter-spacing:.1em; text-decoration:none; text-transform:uppercase; }
+.quick-nav a:hover, .quick-nav a:focus-visible { color:var(--rose); }
+.hero { position:relative; isolation:isolate; overflow:hidden; margin-top:22px; border:1px solid rgba(45,35,80,.18); border-radius:2px 2px 28px 2px; background:linear-gradient(112deg, #f7f0df 0%, #f7f0df 49%, #e9d9d0 100%); box-shadow:12px 14px 0 rgba(45,35,80,.08); }
+.hero::before { content:''; position:absolute; z-index:-1; width:520px; height:520px; right:-190px; top:-210px; border-radius:50%; background:radial-gradient(circle, rgba(233,188,98,.3), rgba(233,188,98,0) 68%); }
+.hero::after { content:'NIGHT SHIFT / FIELD NOTE 001'; position:absolute; right:24px; top:24px; color:rgba(45,35,80,.42); font-size:9px; letter-spacing:.14em; transform:rotate(90deg) translateX(100%); transform-origin:top right; }
+.hero h1 { max-width:560px; font-size:clamp(64px, 8vw, 112px); }
+.hero-intro { max-width:430px; }
+.story { position:relative; }
+.story::before { content:'✦'; position:absolute; right:5%; top:76px; color:var(--gold); font-size:28px; opacity:.75; }
+.story-heading h2 { font-size:clamp(52px, 6vw, 82px); }
+.scene-player { border-radius:2px 2px 18px 2px; box-shadow:8px 10px 0 rgba(45,35,80,.08); }
+.scene-copy { background:linear-gradient(145deg, var(--violet) 0%, #3b2d5d 100%); }
+.scene-copy h3 { letter-spacing:-.03em; }
+.scene-bridge { color:var(--gold); }
+.section-rule { border-top-color:rgba(45,35,80,.16); }
+button:focus-visible, a:focus-visible, input:focus-visible { outline:2px solid var(--rose); outline-offset:3px; }
+
+@media (max-width: 850px) {
+  .quick-nav { order:3; width:100%; margin-left:0; padding-top:6px; border-top:1px solid var(--line); }
+  .hero { margin-top:14px; }
+  .hero::after { display:none; }
+  .hero h1 { font-size:clamp(56px, 10vw, 84px); }
+}
+
+@media (max-width: 600px) {
+  .quick-nav { gap:16px; overflow:auto; }
+  .quick-nav a { white-space:nowrap; }
+  .hero { margin-top:8px; border-radius:0 0 18px 0; box-shadow:6px 8px 0 rgba(45,35,80,.08); }
+  .hero h1 { font-size:clamp(54px, 16vw, 76px); }
+  .story::before { top:64px; right:8%; }
+}
