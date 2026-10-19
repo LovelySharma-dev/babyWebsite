@@ -13,6 +13,7 @@ One night, a tiny neighborhood creature loses its favorite dream. Visitors follo
 ## Original interactions
 
 - Four-step keyboard-accessible story player with progress and scene transitions.
+- Extended bedtime routine section with a handwritten nursery card and Pip's three care steps.
 - Lullaby mood selector, lantern lighting study, and hand-drawn delivery route.
 - Opt-in synthesized click sounds with a visible sound toggle. Audio never starts automatically.
 - Desktop-only sparkle cursor trail with reduced-motion and mobile fallbacks.
